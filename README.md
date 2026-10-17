@@ -1,3 +1,75 @@
+# Achados & Perdidos — ambiente com Docker Compose
+
+## Objetivo
+Empacotar a aplicação web (Flask + Gunicorn) e o banco PostgreSQL em contêineres,
+subindo tudo com um único comando, com dados e fotos persistidos em volumes.
+
+## Pré-requisitos
+- Docker e Docker Compose (nada mais precisa ser instalado).
+
+## Configuração do ambiente
+
+Crie manualmente um arquivo chamado `.env` na raiz do projeto, no mesmo nível do
+`docker-compose.yml`. Abra o arquivo e preencha suas próprias credenciais:
+
+```
+DB_NAME=
+DB_USER=
+DB_PASSWORD=
+```
+
+Escolha os valores para cada variável:
+
+- `DB_NAME`: nome do banco de dados.
+- `DB_USER`: usuário do banco de dados.
+- `DB_PASSWORD`: senha do usuário do banco de dados.
+
+Salve o arquivo `.env` antes de iniciar os containers e garanta que as três
+variáveis estejam preenchidas. Elas são usadas tanto na criação do PostgreSQL
+quanto na conexão da aplicação.
+
+Defina essas credenciais antes da primeira inicialização do banco. Depois que o
+volume do PostgreSQL for criado, alterar o `.env` não modifica automaticamente
+as credenciais já armazenadas nesse volume.
+
+O arquivo `.env` está incluído no `.gitignore` e não deve ser enviado ao GitHub.
+Não crie nem envie arquivos `.env` ou `.env.example` ao repositório.
+
+## Subir, testar, parar e destruir
+```
+docker compose up -d --build     # sobe o ambiente
+docker compose ps                # web running, db healthy
+curl http://localhost:8080/health
+http://localhost:8080            # acessar a interface de usuario
+docker compose logs web --tail 20
+docker compose down              # para e remove contêineres (volumes ficam)
+docker compose down -v           # remove também os volumes (APAGA os dados)
+```
+(No PowerShell use `curl.exe`.)
+
+## Rotas da API
+| Método | Rota | Descrição |
+|---|---|---|
+| GET | /health | Mostra `status: ok` e `banco: conectado` |
+| GET | /itens | Lista os itens |
+| GET | /itens?local=texto | Lista filtrando por local |
+| POST | /itens | Cadastra item (`descricao`, `local`, `foto` opcional) |
+| GET | /fotos/<nome> | Devolve a foto |
+| GET | /estatisticas | Total de itens no banco e de fotos no volume |
+
+## Estrutura
+```
+app/ (app.py, requirements.txt, Dockerfile, .dockerignore, templates/index.html)
+db/init.sql
+docs/ (arquitetura.md, RELATORIO.md, REFLEXAO.md, evidencias/)
+docker-compose.yml  .env.example  .gitignore  README.md
+```
+
+## Diagrama
+Veja `docs/arquitetura.md`.
+
+---
+
 # Evidências — Achados & Perdidos
 
 Avaliação de Grau 1 · Computação em Nuvem · ULBRA Palmas · Prof. Fábio Castro
@@ -75,6 +147,28 @@ RF04. A rota devolve as imagens gravadas no volume `fotos`.
 
 *Últimas 20 linhas de log do serviço web.*
 O traceback é do Gunicorn reiniciando um worker (provável timeout de uma conexão ociosa do navegador). Um novo worker já aparece subindo (pid 10) e a aplicação continuou respondendo.
+
+### Evidências da interface web
+
+#### Print 1 — Página inicial
+![Página inicial com itens cadastrados](img/paginaInicial.png)
+
+*Página inicial exibindo os itens cadastrados e as fotos disponíveis.*
+
+#### Print 2 — Upload
+![Formulário de upload preenchido](img/cadastrandoItem.png)
+
+*Formulário preenchido com a descrição, o local e uma foto selecionada para envio.*
+
+#### Print 3 — Cadastro realizado
+![Item cadastrado com foto](img/itemCadastrado.png)
+
+*Novo item exibido na listagem após o cadastro, com a foto enviada.*
+
+#### Print 4 — Persistência
+![Item preservado após reiniciar os contêineres](img/reiniciado-e-manteve.png)
+
+*Item permanecendo disponível após a reinicialização dos contêineres sem apagar os volumes.*
 
 ---
 

@@ -8,6 +8,7 @@ RUN pip install --no-cache-dir -r requirements.txt
 
 # 2) codigo depois
 COPY app.py .
+COPY templates ./templates
 
 # 3) diretorio de uploads + usuario sem privilegios
 RUN mkdir -p /app/uploads \
