@@ -8,6 +8,7 @@
 | `COPY requirements.txt .` | Copia só as dependências primeiro. |
 | `RUN pip install --no-cache-dir -r requirements.txt` | Instala as dependências sem guardar cache do pip (imagem menor). |
 | `COPY app.py .` | Copia o código por último. |
+| `COPY templates ./templates` | Copia o template HTML da interface para a imagem. |
 | `RUN mkdir ... useradd ... chown` | Cria `/app/uploads`, cria o usuário `appuser` sem privilégios e o torna dono da pasta. |
 | `USER appuser` | A aplicação roda sem ser root (RNF04). |
 | `EXPOSE 5000` | Documenta a porta da aplicação. |
@@ -42,7 +43,8 @@ precisam de root (instalar, criar usuário).
 
 ## (d) Ciclo de vida dos volumes
 
-Resultados obtidos na Tarefa 5 (prints em `EVIDENCIAS.md`, na raiz do repositório):
+Resultados obtidos na Tarefa 5 (prints documentados no `README.md`; saídas completas
+em `docs/evidencias/`):
 
 | Situação | Resultado obtido | Motivo |
 |---|---|---|

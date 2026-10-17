@@ -1,7 +1,7 @@
 # Legendas das evidências
 
-Os prints estão em `EVIDENCIAS.md`, na raiz do repositório (com legenda em cada evidência; imagens em `img/`). As saídas em texto
-estão nos arquivos `.txt` desta pasta.
+Os prints estão documentados no `README.md`, com as imagens na pasta `img/`. As
+saídas completas em texto estão nos arquivos `.txt` desta pasta.
 
 | ID | Legenda |
 |---|---|

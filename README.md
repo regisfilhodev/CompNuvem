@@ -25,8 +25,9 @@ os valores para cada variável:
 - `DB_USER`: usuário do banco de dados.
 - `DB_PASSWORD`: senha do usuário do banco de dados.
 
-Salve o arquivo `.env` antes de iniciar os containers e garanta que as três
-variáveis estejam preenchidas. Elas são usadas tanto na criação do PostgreSQL
+Substitua os valores de exemplo e preencha as três variáveis com suas próprias
+credenciais. Não inicie o projeto enquanto alguma delas estiver vazia. Salve o
+arquivo `.env` antes de iniciar os containers. Elas são usadas tanto na criação do PostgreSQL
 quanto na conexão da aplicação.
 
 Defina essas credenciais antes da primeira inicialização do banco. Depois que o
