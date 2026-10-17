@@ -1,0 +1,105 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Achados e Perdidos</title>
+  <style>
+    body { max-width: 900px; margin: 0 auto; padding: 24px; font: 16px Arial, sans-serif; color: #222; }
+    h1, h2 { margin-bottom: 12px; }
+    form { display: grid; gap: 10px; max-width: 480px; margin-bottom: 28px; }
+    input, button { box-sizing: border-box; padding: 9px; font: inherit; }
+    button { cursor: pointer; }
+    #mensagem { min-height: 20px; margin: 12px 0; }
+    .sucesso { color: #176b2c; }
+    .erro { color: #a11; }
+    #itens { display: grid; gap: 12px; }
+    .item { display: flex; gap: 16px; align-items: flex-start; padding: 14px; border: 1px solid #ccc; border-radius: 6px; }
+    .item img { width: 140px; max-height: 140px; object-fit: cover; }
+    .item p { margin: 5px 0; }
+  </style>
+</head>
+<body>
+  <h1>Achados e Perdidos</h1>
+  <h2>Cadastrar item</h2>
+  <form id="formulario">
+    <label for="descricao">Descrição</label>
+    <input id="descricao" name="descricao" required>
+    <label for="local">Local onde foi encontrado</label>
+    <input id="local" name="local" required>
+    <label for="foto">Foto (opcional)</label>
+    <input id="foto" name="foto" type="file" accept="image/*">
+    <button type="submit">Cadastrar item</button>
+  </form>
+  <p id="mensagem" role="status"></p>
+  <h2>Itens cadastrados</h2>
+  <div id="itens">Carregando itens...</div>
+  <script>
+    const formulario = document.querySelector("#formulario");
+    const mensagem = document.querySelector("#mensagem");
+    const lista = document.querySelector("#itens");
+
+    function mostrarMensagem(texto, tipo) {
+      mensagem.textContent = texto;
+      mensagem.className = tipo;
+    }
+
+    function criarItem(item) {
+      const card = document.createElement("article");
+      card.className = "item";
+      if (item.foto) {
+        const imagem = document.createElement("img");
+        imagem.src = item.foto;
+        imagem.alt = "Foto de " + item.descricao;
+        card.appendChild(imagem);
+      }
+      const detalhes = document.createElement("div");
+      const descricao = document.createElement("p");
+      descricao.textContent = item.descricao;
+      const local = document.createElement("p");
+      local.textContent = "Local: " + item.local;
+      detalhes.append(descricao, local);
+      card.appendChild(detalhes);
+      return card;
+    }
+
+    async function carregarItens() {
+      const resposta = await fetch("/itens");
+      if (!resposta.ok) {
+        throw new Error("Não foi possível carregar os itens.");
+      }
+      const itens = await resposta.json();
+      lista.replaceChildren();
+      if (!itens.length) {
+        lista.textContent = "Nenhum item cadastrado.";
+        return;
+      }
+      itens.forEach((item) => lista.appendChild(criarItem(item)));
+    }
+
+    formulario.addEventListener("submit", async (evento) => {
+      evento.preventDefault();
+      mostrarMensagem("", "");
+      try {
+        const resposta = await fetch("/itens", {
+          method: "POST",
+          body: new FormData(formulario)
+        });
+        const resultado = await resposta.json();
+        if (!resposta.ok) {
+          throw new Error(resultado.erro || "Não foi possível cadastrar o item.");
+        }
+        formulario.reset();
+        mostrarMensagem("Item cadastrado com sucesso.", "sucesso");
+        await carregarItens();
+      } catch (erro) {
+        mostrarMensagem(erro.message, "erro");
+      }
+    });
+
+    carregarItens().catch((erro) => {
+      lista.textContent = erro.message;
+    });
+  </script>
+</body>
+</html>

@@ -1,6 +1,6 @@
 import os, uuid, socket
 import psycopg
-from flask import Flask, request, jsonify, send_from_directory
+from flask import Flask, request, jsonify, send_from_directory, render_template
 
 app = Flask(__name__)
 UPLOAD_DIR = os.getenv("UPLOAD_DIR", "/app/uploads")
@@ -10,6 +10,10 @@ DB_URL = (f"host={os.getenv('DB_HOST', 'db')} port={os.getenv('DB_PORT', '5432')
 
 def conectar():
     return psycopg.connect(DB_URL)
+
+@app.get("/")
+def pagina_inicial():
+    return render_template("index.html")
 
 @app.get("/health")
 def health():
