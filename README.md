@@ -9,16 +9,17 @@ subindo tudo com um único comando, com dados e fotos persistidos em volumes.
 
 ## Configuração do ambiente
 
-Crie manualmente um arquivo chamado `.env` na raiz do projeto, no mesmo nível do
-`docker-compose.yml`. Abra o arquivo e preencha suas próprias credenciais:
+Crie um arquivo chamado `.env` na raiz do projeto, no mesmo nível do
+`docker-compose.yml`. Você pode copiar o modelo `.env.example` e depois abrir o
+arquivo `.env` para substituir os valores de exemplo pelas suas próprias
+credenciais:
 
 ```
-DB_NAME=
-DB_USER=
-DB_PASSWORD=
+copy .env.example .env
 ```
 
-Escolha os valores para cada variável:
+No Linux ou macOS, use `cp .env.example .env`. Em seguida, abra o `.env` e escolha
+os valores para cada variável:
 
 - `DB_NAME`: nome do banco de dados.
 - `DB_USER`: usuário do banco de dados.
@@ -33,7 +34,8 @@ volume do PostgreSQL for criado, alterar o `.env` não modifica automaticamente
 as credenciais já armazenadas nesse volume.
 
 O arquivo `.env` está incluído no `.gitignore` e não deve ser enviado ao GitHub.
-Não crie nem envie arquivos `.env` ou `.env.example` ao repositório.
+O `.env.example` contém apenas valores fictícios e pode ser versionado como
+modelo; nunca substitua esses valores por credenciais reais.
 
 ## Subir, testar, parar e destruir
 ```
@@ -59,10 +61,56 @@ docker compose down -v           # remove também os volumes (APAGA os dados)
 
 ## Estrutura
 ```
-app/ (app.py, requirements.txt, Dockerfile, .dockerignore, templates/index.html)
-db/init.sql
-docs/ (arquitetura.md, RELATORIO.md, REFLEXAO.md, evidencias/)
-docker-compose.yml  .env.example  .gitignore  README.md
+app/
+├── app.py
+├── Dockerfile
+├── requirements.txt
+├── .dockerignore
+└── templates/
+    └── index.html
+db/
+└── init.sql
+docs/
+├── arquitetura.md
+├── REFLEXAO.md
+├── RELATORIO.md
+└── evidencias/
+    ├── 11_down_up.txt
+    ├── 13_volume_ls.txt
+    ├── 14_volume_inspect.txt
+    ├── 15_ls_uploads.txt
+    ├── 16_down_v.txt
+    ├── 18_network_inspect.txt
+    ├── 19_image_ls.txt
+    ├── 20_whoami.txt
+    ├── 21_scale.txt
+    └── LEGENDAS.md
+img/
+├── 02_ps.png
+├── 03_health.png
+├── 04_itens.png
+├── 05_filtro_biblio.png
+├── 06_cadastro_foto_1.png
+├── 06_cadastro_foto_2.png
+├── 07_estatisticas.png
+├── 08_foto_navegador_1.png
+├── 08_foto_navegador_2.png
+├── 09_logs_web.png
+├── 10_stats_antes.png
+├── 12_stats_depois.png
+├── 13_14_15_volumes.png
+├── 17_foto_404.png
+├── 17_stats_apos_down_v.png
+├── 19_image_ls.png
+├── cadastrandoItem.png
+├── itemCadastrado.png
+├── paginaInicial.png
+└── reiniciado-e-manteve.png
+.env (criado localmente; não versionado)
+.env.example
+.gitignore
+docker-compose.yml
+README.md
 ```
 
 ## Diagrama
@@ -183,7 +231,7 @@ O traceback é do Gunicorn reiniciando um worker (provável timeout de uma conex
 Referência antes de recriar os contêineres.
 
 #### Evidência 11_down_up
-*docker compose down seguido de up -d (trecho; completo em [11_down_up.txt](achados-perdidos/docs/evidencias/11_down_up.txt)).*
+*docker compose down seguido de up -d (trecho; completo em [11_down_up.txt](docs/evidencias/11_down_up.txt)).*
 
 ```
 $ docker compose down
@@ -218,12 +266,12 @@ $ docker compose exec web ls -l /app/uploads
 -rw-r--r-- 1 appuser appuser 15780 ... 460a7296ba264946accedbe19613845d.jpg
 -rw-r--r-- 1 appuser appuser  9360 ... e1b2d4a419de4f8b9e49a7e95bdbdc6d.jpg
 ```
-Os dois volumes existem. Os dados ficam fisicamente no campo `Mountpoint`, dentro da máquina virtual do Docker (não numa pasta do Windows). As 2 fotos pertencem ao usuário `appuser`. Textos completos: [13](achados-perdidos/docs/evidencias/13_volume_ls.txt), [14](achados-perdidos/docs/evidencias/14_volume_inspect.txt) e [15](achados-perdidos/docs/evidencias/15_ls_uploads.txt).
+Os dois volumes existem. Os dados ficam fisicamente no campo `Mountpoint`, dentro da máquina virtual do Docker (não numa pasta do Windows). As 2 fotos pertencem ao usuário `appuser`. Textos completos: [13](docs/evidencias/13_volume_ls.txt), [14](docs/evidencias/14_volume_inspect.txt) e [15](docs/evidencias/15_ls_uploads.txt).
 
 ### Situação 3 — Remoção dos volumes (down -v)
 
 #### Evidência 16_down_v
-*docker compose down -v removendo os volumes (trecho; completo em [16_down_v.txt](achados-perdidos/docs/evidencias/16_down_v.txt)).*
+*docker compose down -v removendo os volumes (trecho; completo em [16_down_v.txt](docs/evidencias/16_down_v.txt)).*
 
 ```
 $ docker compose down -v
@@ -257,7 +305,7 @@ O arquivo foi apagado junto com o volume `fotos`.
 ## 3. Evidências complementares (A4)
 
 ### Evidência 18_network_inspect
-*docker network inspect da rede_interna (resumo; completo em [18_network_inspect.txt](achados-perdidos/docs/evidencias/18_network_inspect.txt)).*
+*docker network inspect da rede_interna (resumo; completo em [18_network_inspect.txt](docs/evidencias/18_network_inspect.txt)).*
 
 ```
 Name:    achados-perdidos_rede_interna
@@ -284,7 +332,7 @@ appuser
 RNF04. O contêiner web não roda como root.
 
 ### Evidência 21_scale
-*docker compose up -d --scale web=3: erro de porta em uso (completo em [21_scale.txt](achados-perdidos/docs/evidencias/21_scale.txt)).*
+*docker compose up -d --scale web=3: erro de porta em uso (completo em [21_scale.txt](docs/evidencias/21_scale.txt)).*
 
 ```
 $ docker compose up -d --scale web=3
