@@ -73,37 +73,7 @@ docs/
 ├── REFLEXAO.md
 ├── RELATORIO.md
 └── evidencias/
-    ├── 11_down_up.txt
-    ├── 13_volume_ls.txt
-    ├── 14_volume_inspect.txt
-    ├── 15_ls_uploads.txt
-    ├── 16_down_v.txt
-    ├── 18_network_inspect.txt
-    ├── 19_image_ls.txt
-    ├── 20_whoami.txt
-    ├── 21_scale.txt
-    └── LEGENDAS.md
 img/
-├── 02_ps.png
-├── 03_health.png
-├── 04_itens.png
-├── 05_filtro_biblio.png
-├── 06_cadastro_foto_1.png
-├── 06_cadastro_foto_2.png
-├── 07_estatisticas.png
-├── 08_foto_navegador_1.png
-├── 08_foto_navegador_2.png
-├── 09_logs_web.png
-├── 10_stats_antes.png
-├── 12_stats_depois.png
-├── 13_14_15_volumes.png
-├── 17_foto_404.png
-├── 17_stats_apos_down_v.png
-├── 19_image_ls.png
-├── cadastrandoItem.png
-├── itemCadastrado.png
-├── paginaInicial.png
-└── reiniciado-e-manteve.png
 .env (criado localmente; não versionado)
 .env.example
 .gitignore
