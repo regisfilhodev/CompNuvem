@@ -1,0 +1,3 @@
+IMAGE                         ID             DISK USAGE   CONTENT SIZE   EXTRA
+achados-perdidos-web:latest   e090ce84c457        219MB         53.8MB   U
+postgres:16-alpine            721873c34ceb        420MB          117MB   U
