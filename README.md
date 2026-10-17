@@ -9,34 +9,31 @@ subindo tudo com um único comando, com dados e fotos persistidos em volumes.
 
 ## Configuração do ambiente
 
-Crie um arquivo chamado `.env` na raiz do projeto, no mesmo nível do
-`docker-compose.yml`. Você pode copiar o modelo `.env.example` e depois abrir o
-arquivo `.env` para substituir os valores de exemplo pelas suas próprias
-credenciais:
+Antes de iniciar o projeto, crie o arquivo `.env` na raiz do repositório, no mesmo nível do `docker-compose.yml`. Para isso, copie o arquivo de exemplo:
 
-```
-copy .env.example .env
+**No Windows (PowerShell):**
+```powershell
+Copy-Item .env.example .env
 ```
 
-No Linux ou macOS, use `cp .env.example .env`. Em seguida, abra o `.env` e escolha
-os valores para cada variável:
+**No Linux ou macOS:**
+```bash
+cp .env.example .env
+```
+
+Abra o arquivo `.env` e configure as variáveis:
 
 - `DB_NAME`: nome do banco de dados.
 - `DB_USER`: usuário do banco de dados.
 - `DB_PASSWORD`: senha do usuário do banco de dados.
 
-Substitua os valores de exemplo e preencha as três variáveis com suas próprias
-credenciais. Não inicie o projeto enquanto alguma delas estiver vazia. Salve o
-arquivo `.env` antes de iniciar os containers. Elas são usadas tanto na criação do PostgreSQL
-quanto na conexão da aplicação.
+O arquivo `.env.example` contém valores fictícios apenas para demonstrar a configuração. Substitua esses valores no arquivo `.env` pelas credenciais que serão utilizadas no seu ambiente local. Não deixe nenhuma variável vazia.
 
-Defina essas credenciais antes da primeira inicialização do banco. Depois que o
-volume do PostgreSQL for criado, alterar o `.env` não modifica automaticamente
-as credenciais já armazenadas nesse volume.
+Essas variáveis são utilizadas tanto na configuração do PostgreSQL quanto na conexão da aplicação Flask com o banco de dados.
 
-O arquivo `.env` está incluído no `.gitignore` e não deve ser enviado ao GitHub.
-O `.env.example` contém apenas valores fictícios e pode ser versionado como
-modelo; nunca substitua esses valores por credenciais reais.
+**Importante:** configure as credenciais antes da primeira inicialização do banco. Depois que o volume do PostgreSQL for criado, alterar o `.env` não modifica automaticamente as credenciais já armazenadas nesse volume.
+
+O arquivo `.env` está incluído no `.gitignore` e não deve ser enviado ao GitHub. O `.env.example` pode ser versionado, desde que contenha somente valores fictícios, nunca credenciais reais.
 
 ## Subir, testar, parar e destruir
 ```
